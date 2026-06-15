@@ -1,8 +1,42 @@
 <script lang="ts">
 	import Tile from './Tile.svelte';
-	import type { Side } from './types';
+	import type { Side, BoardState } from './types';
 
-	const INITIAL_BOARD_STATE = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+	// TODO: replace below with FEN parsing once implemented
+	const INITIAL_BOARD_STATE: BoardState = {
+		'a1': { type: 'rook', side: 'light' },
+		'b1': { type: 'knight', side: 'light' },
+		'c1': { type: 'bishop', side: 'light' },
+		'd1': { type: 'queen', side: 'light' },
+		'e1': { type: 'king', side: 'light' },
+		'f1': { type: 'bishop', side: 'light' },
+		'g1': { type: 'knight', side: 'light' },
+		'h1': { type: 'rook', side: 'light' },
+		'a2': { type: 'pawn', side: 'light' },
+		'b2': { type: 'pawn', side: 'light' },
+		'c2': { type: 'pawn', side: 'light' },
+		'd2': { type: 'pawn', side: 'light' },
+		'e2': { type: 'pawn', side: 'light' },
+		'f2': { type: 'pawn', side: 'light' },
+		'g2': { type: 'pawn', side: 'light' },
+		'h2': { type: 'pawn', side: 'light' },
+		'a7': { type: 'pawn', side: 'dark' },
+		'b7': { type: 'pawn', side: 'dark' },
+		'c7': { type: 'pawn', side: 'dark' },
+		'd7': { type: 'pawn', side: 'dark' },
+		'e7': { type: 'pawn', side: 'dark' },
+		'f7': { type: 'pawn', side: 'dark' },
+		'g7': { type: 'pawn', side: 'dark' },
+		'h7': { type: 'pawn', side: 'dark' },
+		'a8': { type: 'rook', side: 'dark' },
+		'b8': { type: 'knight', side: 'dark' },
+		'c8': { type: 'bishop', side: 'dark' },
+		'd8': { type: 'queen', side: 'dark' },
+		'e8': { type: 'king', side: 'dark' },
+		'f8': { type: 'bishop', side: 'dark' },
+		'g8': { type: 'knight', side: 'dark' },
+		'h8': { type: 'rook', side: 'dark' },
+	};
 	const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
 	const TILE_IDS = RANKS.flatMap((rank, _i) => FILES.map((file, _j) => `${file}${rank}`));
@@ -23,7 +57,7 @@
 	</div>
 	<div class="board">
 		{#each TILE_IDS as tileId, i}
-			<Tile tile={{ id: tileId, side: calcSide(i) }} />
+			<Tile tile={{ id: tileId, side: calcSide(i), piece: INITIAL_BOARD_STATE[tileId] }} />
 		{/each}
 	</div>
 	<div class="rank rank-right">
