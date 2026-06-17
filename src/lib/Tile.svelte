@@ -1,20 +1,30 @@
 <script lang="ts">
 	import type { Tile } from './types';
 	import Piece from './Piece.svelte';
+	import { gameState, selectTile } from './game/gameController.svelte';
 
 	let { tile }: { tile: Tile } = $props();
 </script>
 
-<div class="tile {tile.side}" id={tile.id}>
+<button
+	class="tile {tile.side}"
+	class:selected={tile.id === gameState.selectedTileId}
+	id={tile.id}
+	onclick={() => selectTile(tile.id)}
+>
 	{#if tile.piece}
 		<Piece piece={tile.piece} />
 	{/if}
-</div>
+</button>
 
 <style>
 	.tile {
 		display: grid;
 		place-items: center;
+		border: none;
+	}
+	.selected {
+		box-shadow: inset 0 0 0 9999px rgba(255, 215, 0, 0.35);
 	}
 
 	.light {

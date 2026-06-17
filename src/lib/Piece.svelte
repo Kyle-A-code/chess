@@ -5,7 +5,7 @@
 </script>
 
 <div class="piece {piece.side} {piece.type}">
-  {piece.type}
+	{piece.type}
 </div>
 
 <style>
