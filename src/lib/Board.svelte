@@ -23,7 +23,7 @@
 	</div>
 	<div class="board">
 		{#each TILE_IDS as tileId, i}
-			<Tile tile={{ id: tileId, side: calcSide(i), piece: gameState.boardState[tileId] }} />
+			<Tile tile={{ id: tileId, colour: calcSide(i), piece: gameState.boardState[tileId] }} />
 		{/each}
 	</div>
 	<div class="rank rank-right">

@@ -11,7 +11,7 @@ Build an interactive chess experience as an opportunity to learn more about svel
 - [x] **Milestone 1:** Board Rendering
 - [x] **Milestone 2:** Full Board Initialization
 - [x] **Milestone 3:** Click Source/Destination Movement
-- [ ] **Milestone 4:** Drag and Drop Movement
+- [x] **Milestone 4:** Drag and Drop Movement
 - [ ] **Milestone 5:** FEN Parsing and Text-File Persistence
 - [ ] **Milestone 6:** Legal Move Engine
 - [ ] **Milestone 7:** Game Completion Logic

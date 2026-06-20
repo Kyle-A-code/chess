@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Piece } from './types';
+	import { selectTile } from './game/gameController.svelte';
+	import { gameState } from './game/gameController.svelte';
 
-	let { piece }: { piece: Piece } = $props();
+	let { piece, tileId }: { piece: Piece; tileId: string } = $props();
 
 	// Todo: replace with svg icons
 	const pieceIcon = {
@@ -10,11 +12,28 @@
 		bishop: '♝',
 		rook: '♜',
 		queen: '♛',
-		king: '♚',
+		king: '♚'
+	};
+
+	const handleDragStart = () => {
+		selectTile(tileId);
+	};
+
+	// If drag is ended via this resets the tile
+	const handleDragEnd = () => {
+		if (gameState.selectedTileId === tileId) {
+			selectTile(tileId);
+		}
 	};
 </script>
 
-<div class="piece {piece.side} {piece.type}">
+<div
+	class="piece {piece.side} {piece.type}"
+	role="presentation"
+	draggable={piece.side === gameState.activeSide}
+	ondragstart={handleDragStart}
+	ondragend={handleDragEnd}
+>
 	{pieceIcon[piece.type]}
 </div>
 
