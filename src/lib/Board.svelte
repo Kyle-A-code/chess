@@ -1,17 +1,7 @@
 <script lang="ts">
 	import Tile from './Tile.svelte';
-	import type { Side } from './types';
 	import { gameState } from './game/gameController.svelte';
-
-	const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-	const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
-	const TILE_IDS = RANKS.flatMap((rank, _i) => FILES.map((file, _j) => `${file}${rank}`));
-
-	const calcSide = (index: number): Side => {
-		const row = Math.floor(index / 8);
-		const col = index % 8;
-		return (row + col) % 2 === 0 ? 'light' : 'dark';
-	};
+	import { BOARD_TILES, FILES, RANKS_REVERSE } from './game/boardPrimitives';
 </script>
 
 <div class="board-container">
@@ -19,15 +9,21 @@
 		{#each FILES as file}<div>{file}</div>{/each}
 	</div>
 	<div class="rank rank-left">
-		{#each RANKS as rank}<div>{rank}</div>{/each}
+		{#each RANKS_REVERSE as rank}<div>{rank}</div>{/each}
 	</div>
 	<div class="board">
-		{#each TILE_IDS as tileId, i}
-			<Tile tile={{ id: tileId, colour: calcSide(i), piece: gameState.boardState[tileId] }} />
+		{#each BOARD_TILES as tile}
+			<Tile
+				tile={{
+					id: tile.id,
+					colour: tile.colour,
+					piece: gameState.boardState.piecePlacement[tile.id]
+				}}
+			/>
 		{/each}
 	</div>
 	<div class="rank rank-right">
-		{#each RANKS as rank}<div>{rank}</div>{/each}
+		{#each RANKS_REVERSE as rank}<div>{rank}</div>{/each}
 	</div>
 	<div class="file file-bottom">
 		{#each FILES as file}<div>{file}</div>{/each}

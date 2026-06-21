@@ -1,4 +1,4 @@
-export type Side = 'light' | 'dark';
+export type Side = 'w' | 'b';
 
 export interface Tile {
 	id: string;
@@ -11,4 +11,13 @@ export interface Piece {
 	side: Side;
 }
 
-export type BoardState = Record<string, Piece | undefined>;
+export type PiecePlacement = Record<string, Piece | undefined>;
+
+export interface BoardState {
+	piecePlacement: PiecePlacement;
+	activeSide: Side;
+	castlingAvailability?: string;
+	enPassantTarget?: string;
+	halfMoveClock: number;
+	fullMoveNumber: number;
+}

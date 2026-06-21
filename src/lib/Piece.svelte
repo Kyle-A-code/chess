@@ -30,7 +30,7 @@
 <div
 	class="piece {piece.side} {piece.type}"
 	role="presentation"
-	draggable={piece.side === gameState.activeSide}
+	draggable={piece.side === gameState.boardState.activeSide}
 	ondragstart={handleDragStart}
 	ondragend={handleDragEnd}
 >
@@ -42,7 +42,7 @@
 		/* Todo: remove font-size once svg icons are used */
 		font-size: 3rem;
 	}
-	.light {
+	.w {
 		color: #ffffff;
 		-webkit-text-stroke: 1px #111827;
 		text-shadow:
@@ -52,7 +52,7 @@
 			0 -1px 0 #111827;
 	}
 
-	.dark {
+	.b {
 		color: #111827;
 		-webkit-text-stroke: 1px #f9fafb;
 		text-shadow:

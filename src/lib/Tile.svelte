@@ -43,7 +43,7 @@
 	ondragleave={clearHover}
 >
 	{#if tile.piece}
-		<Piece piece={tile.piece} tileId={tile.id}/>
+		<Piece piece={tile.piece} tileId={tile.id} />
 	{/if}
 </button>
 
@@ -53,15 +53,16 @@
 		place-items: center;
 		border: none;
 	}
-	.selected, .drag_hover {
+	.selected,
+	.drag_hover {
 		box-shadow: inset 0 0 0 9999px rgba(255, 215, 0, 0.35);
 	}
 
-	.light {
+	.w {
 		background-color: white;
 	}
 
-	.dark {
+	.b {
 		background-color: black;
 	}
 </style>
