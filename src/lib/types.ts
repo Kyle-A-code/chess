@@ -1,3 +1,5 @@
+import type { PieceType } from "./game/boardPrimitives";
+
 export type Side = 'w' | 'b';
 
 export interface Tile {
@@ -7,7 +9,7 @@ export interface Tile {
 }
 
 export interface Piece {
-	type: 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king';
+	type: PieceType
 	side: Side;
 }
 

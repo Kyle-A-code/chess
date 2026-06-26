@@ -1,7 +1,7 @@
 import type { BoardState } from '../types.ts';
-import { parseFenString } from './fen.svelte';
+import { fenToBoardState } from './fen';
 
-const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+export const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 interface GameState {
 	selectedTileId: string | undefined;
@@ -10,7 +10,7 @@ interface GameState {
 
 const createNewGameState = (): GameState => ({
 	selectedTileId: INITIAL_SELECTED_TILE_ID,
-	boardState: parseFenString(START_FEN)
+	boardState: fenToBoardState(START_FEN)
 });
 
 const INITIAL_SELECTED_TILE_ID = undefined;
