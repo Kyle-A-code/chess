@@ -1,5 +1,5 @@
 import type { BoardState, Piece, PiecePlacement, Side } from '../types';
-import { FILES, PIECES, RANKS_REVERSE, type Rank } from './boardPrimitives';
+import { FILES, PIECES, RANKS_REVERSE, type Rank, type Square } from './boardPrimitives';
 
 const validPiecePlacementChars = new Set([
 	'1',
@@ -196,7 +196,7 @@ const serialiseFenRank = (rank: Rank, piecePlacement: PiecePlacement) => {
 	let serialised = '';
 	for (const file of FILES) {
 		const square = `${file}${rank}`;
-		const piece = piecePlacement[square];
+		const piece = piecePlacement[square as Square];
 		if (piece !== undefined) {
 			if (emptySquares > 0) {
 				serialised += emptySquares.toString();

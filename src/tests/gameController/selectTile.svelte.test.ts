@@ -84,10 +84,10 @@ describe('Given a game in progress', () => {
 			});
 		});
 		describe('When selecting a tile with a piece from the same side', () => {
-			test('Then nothing should happen', () => {
+			test('Then selection should move to that tile', () => {
 				gameState.boardState.piecePlacement[A2] = { type: 'pawn', side: 'w' };
 				selectTile(A2);
-				expect(gameState.selectedTileId).toBe(A1);
+				expect(gameState.selectedTileId).toBe(A2);
 				expect(gameState.boardState.piecePlacement[A1]).toEqual({ type: 'pawn', side: 'w' });
 				expect(gameState.boardState.piecePlacement[A2]).toEqual({ type: 'pawn', side: 'w' });
 				expect(gameState.boardState.activeSide).toBe('w');

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { Piece } from './types';
+	import type { Square } from './game/boardPrimitives';
 	import { selectTile } from './game/gameController.svelte';
 	import { gameState } from './game/gameController.svelte';
 
-	let { piece, tileId }: { piece: Piece; tileId: string } = $props();
+	let { piece, tileId }: { piece: Piece; tileId: Square } = $props();
 
 	// Todo: replace with svg icons
 	const pieceIcon = {

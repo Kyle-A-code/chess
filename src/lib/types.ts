@@ -1,9 +1,9 @@
-import type { PieceType } from "./game/boardPrimitives";
+import type { PieceType, Square } from "./game/boardPrimitives";
 
 export type Side = 'w' | 'b';
 
 export interface Tile {
-	id: string;
+	id: Square;
 	colour: Side;
 	piece?: Piece;
 }
@@ -13,7 +13,7 @@ export interface Piece {
 	side: Side;
 }
 
-export type PiecePlacement = Record<string, Piece | undefined>;
+export type PiecePlacement = Partial<Record<Square, Piece | undefined>>;
 
 export interface BoardState {
 	piecePlacement: PiecePlacement;
