@@ -146,6 +146,7 @@ describe('Given serialising a board state to a FEN string', () => {
 	});
 
 	test('When serialising a board state with an out of order en passant target, Then it should throw an invalid FEN error', () => {
+		// @ts-expect-error
 		boardState.enPassantTarget = '3d';
 		expect(() => boardStateToFen(boardState)).toThrow('Invalid en passant target: 3d');
 	});

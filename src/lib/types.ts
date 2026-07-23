@@ -19,7 +19,7 @@ export interface BoardState {
 	piecePlacement: PiecePlacement;
 	activeSide: Side;
 	castlingAvailability?: string;
-	enPassantTarget?: string;
+	enPassantTarget?: Square;
 	halfMoveClock: number;
 	fullMoveNumber: number;
 }

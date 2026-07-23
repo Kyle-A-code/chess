@@ -1,5 +1,5 @@
 import type { BoardState, Piece, PiecePlacement, Side } from '../types';
-import { FILES, PIECES, RANKS_REVERSE, type Rank, type Square } from './boardPrimitives';
+import { FILES, isSquare, PIECES, RANKS_REVERSE, type Rank, type Square } from './boardPrimitives';
 
 const validPiecePlacementChars = new Set([
 	'1',
@@ -135,7 +135,9 @@ const parseFenEnPassantTargetSquare = (enPassantTarget: string) => {
 		return undefined;
 	} else {
 		validateEnPassantTarget(enPassantTarget);
-
+		if (!isSquare(enPassantTarget)) {
+			throw new Error(`Invalid en passant target: ${enPassantTarget}`);
+		}
 		return enPassantTarget;
 	}
 };
