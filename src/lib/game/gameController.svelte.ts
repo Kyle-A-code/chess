@@ -71,7 +71,7 @@ export const selectTile = (tileId: Square) => {
 		const moves = getPseudoLegalMoves(gameState.selectedTileId);
 		// TODO: once all move types are implemented, we can just return if moves are undefined
 		if (moves !== undefined && !moves.some(move => move.to === tileId)) {
-			console.log('invalid move');
+			// TODO: ideally do something visual like make the tile flash red
 			return
 		}
 
@@ -110,7 +110,6 @@ const persistBoardState = () => {
 // Need to decide whether i want 1 type for all pieces or keep pawn, rook and king types separate
 const getPseudoLegalMoves = (tileId: Square): PawnMove[] | undefined => {
 	const piece = gameState.boardState.piecePlacement[tileId];
-	console.log(piece);
 	if (piece === undefined) {
 		return undefined;
 	}
