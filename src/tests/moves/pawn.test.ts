@@ -14,16 +14,6 @@ const createBoardState = (
 	fullMoveNumber: 1
 });
 
-const createPawnTile = (id: Square, side: Side): Tile => ({
-	id,
-	colour: 'w',
-	piece: { type: 'pawn', side }
-});
-
-const getMoves = (boardState: BoardState, pawnSquare: Square, side: Side) => {
-	return pseudoLegalPawnMoves(boardState, createPawnTile(pawnSquare, side));
-};
-
 type MoveContextOptions = {
 	pawnSquare: Square;
 	side: Side;
@@ -37,26 +27,20 @@ const subject = ({ pawnSquare, side, extras = {}, enPassantTarget }: MoveContext
 		...extras
 	};
 	const boardState = createBoardState(piecePlacement, enPassantTarget);
-	return getMoves(boardState, pawnSquare, side);
+	return pseudoLegalPawnMoves(boardState, pawnSquare);
 };
 
 describe('Given an invalid tile is provided', () => {
-	const boardState = createBoardState({});
+	const boardState = createBoardState({['e2']: { type: 'rook', side: 'w'}});
 	test('When tile piece is not a pawn, Then it should throw tile is not a pawn', () => {
-		const nonPawnTile: Tile = {
-			id: 'e2',
-			colour: 'w',
-			piece: { type: 'rook', side: 'w' }
-		};
 
-		expect(() => pseudoLegalPawnMoves(boardState, nonPawnTile)).toThrow('Tile is not a pawn');
+		expect(() => pseudoLegalPawnMoves(boardState, 'e2')).toThrow('Tile is not a pawn');
 	});
 
 	test('When tile id is invalid, Then it should throw invalid tile', () => {
-		// @ts-expect-error testing runtime guard for invalid tile id
-		const invalidTile: Tile = { id: 'z9', colour: 'w', piece: { type: 'pawn', side: 'w' } };
 
-		expect(() => pseudoLegalPawnMoves(boardState, invalidTile)).toThrow('Invalid tile');
+		// @ts-expect-error testing runtime guard for invalid tile id
+		expect(() => pseudoLegalPawnMoves(boardState, 'z9')).toThrow('Invalid tile');
 	});
 });
 
@@ -315,5 +299,4 @@ describe('Given a valid pawn tile is provided', () => {
 			});
 		});
 	});
-
 });

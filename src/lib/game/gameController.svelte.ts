@@ -1,3 +1,4 @@
+import { pseudoLegalPawnMoves, type PawnMove } from '../moves/pawn.js';
 import type { BoardState } from '../types.ts';
 import type { Square } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen } from './fen';
@@ -67,6 +68,13 @@ export const selectTile = (tileId: Square) => {
 		if (targetTile?.side === gameState.boardState.activeSide) {
 			return;
 		}
+		const moves = getPseudoLegalMoves(gameState.selectedTileId);
+		// TODO: once all move types are implemented, we can just return if moves are undefined
+		if (moves !== undefined && !moves.some(move => move.to === tileId)) {
+			console.log('invalid move');
+			return
+		}
+
 		const selectedPiece = gameState.boardState.piecePlacement[gameState.selectedTileId];
 		gameState.boardState.piecePlacement[gameState.selectedTileId] = undefined;
 		// TODO: increment score counter by removed piece if capturing
@@ -93,4 +101,20 @@ const deselectTile = () => {
 const persistBoardState = () => {
 	const fenString = boardStateToFen(gameState.boardState)
 	persistFen(fenString);
+}
+
+// TODO: implement generic move type
+// Need to decide whether i want 1 type for all pieces or keep pawn, rook and king types separate
+const getPseudoLegalMoves = (tileId: Square): PawnMove[] | undefined => {
+	const piece = gameState.boardState.piecePlacement[tileId];
+	console.log(piece);
+	if (piece === undefined) {
+		return undefined;
+	}
+	switch (piece.type) {
+		case 'pawn':
+			return pseudoLegalPawnMoves(gameState.boardState, tileId);
+		default:
+			return undefined;
+	}
 }

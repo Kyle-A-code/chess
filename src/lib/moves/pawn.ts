@@ -85,11 +85,11 @@ const getPseudoLegalMoves = (boardState: BoardState, side: Side, file: File, ran
   return moves;
 }
 
-export const pseudoLegalPawnMoves = (boardState: BoardState, tile: Tile) => {
-  const { piece, id } = tile;
+export const pseudoLegalPawnMoves = (boardState: BoardState, square: Square) => {
+  const [file, rank] = square.split('');
+  if (!isFile(file) || !isRank(rank)) throw new Error('Invalid tile');
+  const piece = boardState.piecePlacement[square];
   if (piece?.type !== 'pawn') throw new Error('Tile is not a pawn');
   const side = piece.side;
-  const [file, rank] = id.split('');
-  if (!isFile(file) || !isRank(rank)) throw new Error('Invalid tile');
   return getPseudoLegalMoves(boardState, side, file, rank);
 }
