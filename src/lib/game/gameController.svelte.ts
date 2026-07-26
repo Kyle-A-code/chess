@@ -79,6 +79,9 @@ export const selectTile = (tileId: Square) => {
 		gameState.boardState.piecePlacement[gameState.selectedTileId] = undefined;
 		// TODO: increment score counter by removed piece if capturing
 		gameState.boardState.piecePlacement[tileId] = selectedPiece;
+		// TODO: if pawn move isEnPassantTarget set en passant target
+		// TODO: if pawn move isPromotion set promotion piece
+		// TODO: if pawn move isEnPassantCapture set en passant target to undefined, remove captured piece
 		deselectTile();
 		nextTurn();
 		persistBoardState();
