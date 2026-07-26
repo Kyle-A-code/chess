@@ -1,7 +1,7 @@
 import type { BoardState, Tile, Side } from "../types";
 import { RANKS, FILES, isRank, isFile, isSquare, type Rank, type File, type Square } from "../game/boardPrimitives";
 
-interface PawnMove {
+export interface PawnMove {
   to: Square;
   isPromotion?: boolean;
   isEnPassantTarget?: boolean;
