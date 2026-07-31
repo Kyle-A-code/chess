@@ -45,12 +45,12 @@ const fenPieceMap: Record<string, Piece> = {
 };
 
 const pieceFenChar: Record<Piece['type'], string> = {
-  pawn: 'p',
-  rook: 'r',
-  knight: 'n',
-  bishop: 'b',
-  queen: 'q',
-  king: 'k'
+	pawn: 'p',
+	rook: 'r',
+	knight: 'n',
+	bishop: 'b',
+	queen: 'q',
+	king: 'k'
 };
 
 // ---------
@@ -272,11 +272,10 @@ const isSide = (side: string): side is Side => {
 };
 
 function validateSide(side: string): asserts side is Side {
-  if (!isSide(side)) {
-    throw new Error(`Invalid side: ${side}`);
-  }
+	if (!isSide(side)) {
+		throw new Error(`Invalid side: ${side}`);
+	}
 }
-
 
 const validateCastlingAvailability = (castlingAvailability: string) => {
 	if (!castlingAvailabilityRegex.test(castlingAvailability)) {

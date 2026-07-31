@@ -94,7 +94,7 @@ const processMove = (move: Move, selectedTileId: Square) => {
 	if (selectedPiece?.type === 'pawn') {
 		processPawnMove(gameState.boardState, move);
 	}
-}
+};
 
 const nextTurn = () => {
 	if (gameState.boardState.activeSide === 'w') {

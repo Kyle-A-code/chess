@@ -1,4 +1,4 @@
-import type { PieceType, Square } from "./game/boardPrimitives";
+import type { PieceType, Square } from './game/boardPrimitives';
 
 export type Side = 'w' | 'b';
 
@@ -9,7 +9,7 @@ export interface Tile {
 }
 
 export interface Piece {
-	type: PieceType
+	type: PieceType;
 	side: Side;
 }
 
@@ -25,8 +25,8 @@ export interface BoardState {
 }
 
 export interface Move {
-  to: Square;
-  isPromotion?: boolean;
-  enPassantTarget?: Square;
-  enPassantCapture?: Square;
+	to: Square;
+	isPromotion?: boolean;
+	enPassantTarget?: Square;
+	enPassantCapture?: Square;
 }

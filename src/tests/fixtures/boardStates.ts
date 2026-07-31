@@ -43,11 +43,9 @@ export const START_BOARD_STATE: BoardState = {
 	fullMoveNumber: 1
 };
 
-export const BLACK_TO_MOVE_FEN =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1';
+export const BLACK_TO_MOVE_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1';
 
-export const MIDGAME_FEN =
-	'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2';
+export const MIDGAME_FEN = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2';
 
 export const MIDGAME_BOARD_STATE: BoardState = {
 	piecePlacement: {
@@ -104,8 +102,7 @@ export const EMPTY_BOARD_STATE: BoardState = {
 
 export const VALID_FENS = [START_FEN, MIDGAME_FEN, EMPTY_FEN] as const;
 
-export const INVALID_FEN_TOO_FEW_FIELDS =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0';
+export const INVALID_FEN_TOO_FEW_FIELDS = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0';
 
 export const INVALID_FEN_TOO_MANY_FIELDS =
 	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 extra';
@@ -115,14 +112,11 @@ export const INVALID_FEN_WRONG_RANK_COUNT = '8/8/8/8/8/8/8 w KQkq - 0 1';
 export const INVALID_FEN_RANK_TOO_LONG =
 	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNRR w KQkq - 0 1';
 
-export const INVALID_FEN_RANK_TOO_SHORT =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBN w KQkq - 0 1';
+export const INVALID_FEN_RANK_TOO_SHORT = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBN w KQkq - 0 1';
 
-export const INVALID_FEN_INVALID_PIECE =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/xNBQKBNR w KQkq - 0 1';
+export const INVALID_FEN_INVALID_PIECE = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/xNBQKBNR w KQkq - 0 1';
 
-export const INVALID_FEN_INVALID_SIDE =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1';
+export const INVALID_FEN_INVALID_SIDE = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1';
 
 export const INVALID_FEN_INVALID_CASTLING =
 	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w qK - 0 1';
@@ -133,8 +127,6 @@ export const INVALID_FEN_INVALID_EN_PASSANT =
 export const INVALID_FEN_NEGATIVE_HALFMOVE =
 	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -1 1';
 
-export const INVALID_FEN_ZERO_FULLMOVE =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0';
+export const INVALID_FEN_ZERO_FULLMOVE = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0';
 
-export const HALFMOVE_FEN_15 =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 15 1';
+export const HALFMOVE_FEN_15 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 15 1';
