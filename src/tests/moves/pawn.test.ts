@@ -1,14 +1,15 @@
-import { describe, expect, test } from 'vitest';
-import { pseudoLegalPawnMoves } from '../../lib/moves/pawn';
+import { beforeEach, describe, expect, test } from 'vitest';
+import { processPawnMove, pseudoLegalPawnMoves } from '../../lib/moves/pawn';
 import type { BoardState, PiecePlacement, Side, Tile } from '../../lib/types';
 import type { Square } from '../../lib/game/boardPrimitives';
 
 const createBoardState = (
 	piecePlacement: PiecePlacement,
-	enPassantTarget?: Square
+	enPassantTarget?: Square,
+	activeSide: Side = 'w'
 ): BoardState => ({
 	piecePlacement,
-	activeSide: 'w',
+	activeSide,
 	enPassantTarget,
 	halfMoveClock: 0,
 	fullMoveNumber: 1
@@ -66,7 +67,7 @@ describe('Given a valid pawn tile is provided', () => {
 							const moves = subject({ pawnSquare, side });
 							expect(moves).toContainEqual({
 								to: twoStepSquare,
-								isEnPassantTarget: true
+								enPassantTarget: oneStepSquare
 							});
 						});
 					});
@@ -84,7 +85,7 @@ describe('Given a valid pawn tile is provided', () => {
 							});
 							expect(moves).not.toContainEqual({
 								to: twoStepSquare,
-								isEnPassantTarget: true
+								enPassantTarget: oneStepSquare
 							});
 						});
 					});
@@ -107,7 +108,7 @@ describe('Given a valid pawn tile is provided', () => {
 							});
 							expect(moves).not.toContainEqual({
 								to: twoStepSquare,
-								isEnPassantTarget: true
+								enPassantTarget: oneStepSquare
 							});
 						}
 					);
@@ -209,7 +210,7 @@ describe('Given a valid pawn tile is provided', () => {
 					});
 					expect(moves).toContainEqual({
 						to: targetSquare,
-						isEnPassantCapture: true
+						enPassantCapture: adjacentSquare
 					});
 				});
 
@@ -221,7 +222,7 @@ describe('Given a valid pawn tile is provided', () => {
 					});
 					expect(moves).not.toContainEqual({
 						to: targetSquare,
-						isEnPassantCapture: true
+						enPassantCapture: adjacentSquare
 					});
 				});
 
@@ -234,7 +235,7 @@ describe('Given a valid pawn tile is provided', () => {
 					});
 					expect(moves).not.toContainEqual({
 						to: targetSquare,
-						isEnPassantCapture: true
+						enPassantCapture: adjacentSquare
 					});
 				});
 
@@ -247,7 +248,7 @@ describe('Given a valid pawn tile is provided', () => {
 					});
 					expect(moves).not.toContainEqual({
 						to: targetSquare,
-						isEnPassantCapture: true
+						enPassantCapture: adjacentSquare
 					});
 				});
 
@@ -263,7 +264,7 @@ describe('Given a valid pawn tile is provided', () => {
 					});
 					expect(moves).not.toContainEqual({
 						to: targetSquare,
-						isEnPassantCapture: true
+						enPassantCapture: adjacentSquare
 					});
 				});
 
@@ -279,7 +280,7 @@ describe('Given a valid pawn tile is provided', () => {
 					});
 					expect(moves).not.toContainEqual({
 						to: targetSquare,
-						isEnPassantCapture: true
+						enPassantCapture: adjacentSquare
 					});
 				});
 			}
@@ -295,8 +296,56 @@ describe('Given a valid pawn tile is provided', () => {
 
 			expect(moves).not.toContainEqual({
 				to: 'd6',
-				isEnPassantCapture: true
+				enPassantCapture: 'd5'
 			});
 		});
+	});
+});
+
+describe('Given processing pawn move side effects', () => {
+	let boardState: BoardState;
+
+	beforeEach(() => {
+		boardState = createBoardState({});
+	});
+
+	test('When move includes an en passant target, Then it should set the board en passant target', () => {
+		processPawnMove(boardState, { to: 'e4', enPassantTarget: 'e3' });
+		expect(boardState.enPassantTarget).toBe('e3');
+	});
+
+	test('When move omits an en passant target, Then it should keep the existing board en passant target', () => {
+		boardState.enPassantTarget = 'd6';
+		processPawnMove(boardState, { to: 'e4' });
+		expect(boardState.enPassantTarget).toBe('d6');
+	});
+
+	test('When move is a promotion for white side to move, Then it should place a white queen on destination square', () => {
+		processPawnMove(boardState, { to: 'e8', isPromotion: true });
+		expect(boardState.piecePlacement.e8).toEqual({ type: 'queen', side: 'w' });
+	});
+
+	test('When move is a promotion for black side to move, Then it should place a black queen on destination square', () => {
+		boardState = createBoardState({}, undefined, 'b');
+		processPawnMove(boardState, { to: 'e1', isPromotion: true });
+		expect(boardState.piecePlacement.e1).toEqual({ type: 'queen', side: 'b' });
+	});
+
+	test('When move is not a promotion, Then it should not replace destination square with a queen', () => {
+		boardState.piecePlacement.e5 = { type: 'rook', side: 'b' };
+		processPawnMove(boardState, { to: 'e5' });
+		expect(boardState.piecePlacement.e5).toEqual({ type: 'rook', side: 'b' });
+	});
+
+	test('When move includes en passant capture square, Then it should remove the captured pawn square', () => {
+		boardState.piecePlacement.d5 = { type: 'pawn', side: 'b' };
+		processPawnMove(boardState, { to: 'd6', enPassantCapture: 'd5' });
+		expect(boardState.piecePlacement.d5).toBeUndefined();
+	});
+
+	test('When move omits en passant capture square, Then it should keep adjacent pieces unchanged', () => {
+		boardState.piecePlacement.d5 = { type: 'pawn', side: 'b' };
+		processPawnMove(boardState, { to: 'd6' });
+		expect(boardState.piecePlacement.d5).toEqual({ type: 'pawn', side: 'b' });
 	});
 });

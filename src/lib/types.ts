@@ -23,3 +23,10 @@ export interface BoardState {
 	halfMoveClock: number;
 	fullMoveNumber: number;
 }
+
+export interface Move {
+  to: Square;
+  isPromotion?: boolean;
+  enPassantTarget?: Square;
+  enPassantCapture?: Square;
+}

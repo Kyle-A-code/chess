@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach } from 'vitest';
-import { fenToBoardState, boardStateToFen } from '../../lib/game/fen';
+import { fenToBoardState, boardStateToFen, START_FEN } from '../../lib/game/fen';
 import type { BoardState } from '../../lib/types';
 import {
 	BLACK_TO_MOVE_FEN,
@@ -20,7 +20,6 @@ import {
 	MIDGAME_BOARD_STATE,
 	MIDGAME_FEN,
 	START_BOARD_STATE,
-	START_FEN,
 	VALID_FENS
 } from '../fixtures/boardStates';
 

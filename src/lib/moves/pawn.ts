@@ -1,12 +1,7 @@
-import type { BoardState, Tile, Side } from "../types";
+import type { BoardState, Side, Move } from "../types";
 import { RANKS, FILES, isRank, isFile, isSquare, type Rank, type File, type Square } from "../game/boardPrimitives";
 
-export interface PawnMove {
-  to: Square;
-  isPromotion?: boolean;
-  isEnPassantTarget?: boolean;
-  isEnPassantCapture?: boolean;
-}
+
 
 const isFirstMove = (side: Side, rank: Rank) => {
   return side === 'w' ? rank === '2' : rank === '7';
@@ -16,14 +11,14 @@ const canPromote = (rank: Rank) => {
   return rank === '1' || rank === '8';
 }
 
-const getCaptureMove = (boardState: BoardState, side: Side, targetSquare: Square, targetRank: Rank): PawnMove | undefined => {
+const getCaptureMove = (boardState: BoardState, side: Side, targetSquare: Square, targetRank: Rank): Move | undefined => {
   const targetPiece = boardState.piecePlacement[targetSquare];
   if (targetPiece === undefined || targetPiece.side === side) return undefined;
 
   return { to: targetSquare, isPromotion: canPromote(targetRank) };
 }
 
-const getEnPassantMove = (boardState: BoardState, side: Side, targetFile: File, currentRank: Rank, targetSquare: Square): PawnMove | undefined => {
+const getEnPassantMove = (boardState: BoardState, side: Side, targetFile: File, currentRank: Rank, targetSquare: Square): Move | undefined => {
   const adjacentSquare = `${targetFile}${currentRank}`;
   if (
     boardState.enPassantTarget === undefined ||
@@ -35,10 +30,10 @@ const getEnPassantMove = (boardState: BoardState, side: Side, targetFile: File, 
   const adjacentPiece = boardState.piecePlacement[adjacentSquare];
   if (adjacentPiece?.type !== 'pawn' || adjacentPiece.side === side) return undefined;
 
-  return { to: targetSquare, isEnPassantCapture: true };
+  return { to: targetSquare, enPassantCapture: adjacentSquare };
 }
 
-const getDiagonalMove = (boardState: BoardState, side: Side, targetFile: File, currentRank: Rank, targetRank: Rank): PawnMove | undefined => {
+const getDiagonalMove = (boardState: BoardState, side: Side, targetFile: File, currentRank: Rank, targetRank: Rank): Move | undefined => {
   const targetSquare = `${targetFile}${targetRank}`;
   if (!isSquare(targetSquare)) return undefined;
 
@@ -51,8 +46,8 @@ const getDiagonalMove = (boardState: BoardState, side: Side, targetFile: File, c
   return undefined;
 }
 
-const getPseudoLegalMoves = (boardState: BoardState, side: Side, file: File, rank: Rank): PawnMove[] => {
-  const moves: PawnMove[] = [];
+const getPseudoLegalMoves = (boardState: BoardState, side: Side, file: File, rank: Rank): Move[] => {
+  const moves: Move[] = [];
   const direction = side === 'w' ? 1 : -1;
   const rankIdx = RANKS.indexOf(rank);
   const fileIdx = FILES.indexOf(file);
@@ -67,7 +62,7 @@ const getPseudoLegalMoves = (boardState: BoardState, side: Side, file: File, ran
     if (isFirstMove(side, rank)) {
       const targetSquare = `${file}${RANKS[rankIdx + 2 * direction]}`;
       if (isSquare(targetSquare) && boardState.piecePlacement[targetSquare] === undefined) {
-        moves.push({ to: targetSquare, isEnPassantTarget: true });
+        moves.push({ to: targetSquare, enPassantTarget: forwardSquare });
       }
     }
   }
@@ -92,4 +87,21 @@ export const pseudoLegalPawnMoves = (boardState: BoardState, square: Square) => 
   if (piece?.type !== 'pawn') throw new Error('Tile is not a pawn');
   const side = piece.side;
   return getPseudoLegalMoves(boardState, side, file, rank);
+}
+
+export const processPawnMove = (boardState: BoardState, move: Move) => {
+  if (move.enPassantTarget !== undefined) {
+    boardState.enPassantTarget = move.enPassantTarget;
+  }
+
+  if (move.isPromotion) {
+    boardState.piecePlacement[move.to] = {
+      type: 'queen',
+      side: boardState.activeSide
+    };
+  }
+
+  if (move.enPassantCapture !== undefined) {
+    boardState.piecePlacement[move.enPassantCapture] = undefined;
+  }
 }

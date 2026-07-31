@@ -1,7 +1,5 @@
 import type { BoardState } from '../../lib/types';
-
-export const START_FEN =
-	'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+import { START_FEN } from '../../lib/game/fen';
 
 export const START_BOARD_STATE: BoardState = {
 	piecePlacement: {

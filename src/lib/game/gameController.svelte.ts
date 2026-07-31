@@ -1,10 +1,9 @@
-import { pseudoLegalPawnMoves, type PawnMove } from '../moves/pawn.js';
-import type { BoardState } from '../types.ts';
+import { processPawnMove, pseudoLegalPawnMoves } from '../moves/pawn.js';
+import type { BoardState, Move } from '../types.ts';
 import type { Square } from './boardPrimitives';
-import { fenToBoardState, boardStateToFen } from './fen';
+import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
 
-export const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-const FEN_STRING_STORAGE_KEY = 'fenString'
+const FEN_STRING_STORAGE_KEY = 'fenString';
 
 interface GameState {
 	selectedTileId: Square | undefined;
@@ -37,7 +36,7 @@ const createNewGameState = (): GameState => {
 	return {
 		selectedTileId: undefined,
 		boardState: fenToBoardState(storedBoardState || START_FEN)
-	}
+	};
 };
 
 export const gameState = $state<GameState>(createNewGameState());
@@ -57,36 +56,45 @@ export const selectTile = (tileId: Square) => {
 
 	if (gameState.boardState.piecePlacement[tileId]?.side === gameState.boardState.activeSide) {
 		gameState.selectedTileId = tileId;
-		return
+		return;
 	}
 
 	if (gameState.selectedTileId !== undefined) {
 		// TODO: this is a naive implementation implement legal move checking
-		// TODO: set half move counter, castling availability and en passant target
+		// TODO: set half move counter, castling availability
 
 		const targetTile = gameState.boardState.piecePlacement[tileId];
 		if (targetTile?.side === gameState.boardState.activeSide) {
 			return;
 		}
 		const moves = getPseudoLegalMoves(gameState.selectedTileId);
+
 		// TODO: once all move types are implemented, we can just return if moves are undefined
-		if (moves !== undefined && !moves.some(move => move.to === tileId)) {
+		const attemptedMove = moves?.find((move) => move.to === tileId);
+		if (attemptedMove === undefined) {
 			// TODO: ideally do something visual like make the tile flash red
-			return
+			return;
 		}
 
-		const selectedPiece = gameState.boardState.piecePlacement[gameState.selectedTileId];
-		gameState.boardState.piecePlacement[gameState.selectedTileId] = undefined;
-		// TODO: increment score counter by removed piece if capturing
-		gameState.boardState.piecePlacement[tileId] = selectedPiece;
-		// TODO: if pawn move isEnPassantTarget set en passant target
-		// TODO: if pawn move isPromotion set promotion piece
-		// TODO: if pawn move isEnPassantCapture set en passant target to undefined, remove captured piece
+		processMove(attemptedMove, gameState.selectedTileId);
 		deselectTile();
 		nextTurn();
 		persistBoardState();
 	}
 };
+
+const processMove = (move: Move, selectedTileId: Square) => {
+	gameState.boardState.enPassantTarget = undefined;
+
+	const selectedPiece = gameState.boardState.piecePlacement[selectedTileId];
+	gameState.boardState.piecePlacement[selectedTileId] = undefined;
+	// TODO: increment score counter by removed piece if capturing
+	gameState.boardState.piecePlacement[move.to] = selectedPiece;
+
+	if (selectedPiece?.type === 'pawn') {
+		processPawnMove(gameState.boardState, move);
+	}
+}
 
 const nextTurn = () => {
 	if (gameState.boardState.activeSide === 'w') {
@@ -102,13 +110,11 @@ const deselectTile = () => {
 };
 
 const persistBoardState = () => {
-	const fenString = boardStateToFen(gameState.boardState)
+	const fenString = boardStateToFen(gameState.boardState);
 	persistFen(fenString);
-}
+};
 
-// TODO: implement generic move type
-// Need to decide whether i want 1 type for all pieces or keep pawn, rook and king types separate
-const getPseudoLegalMoves = (tileId: Square): PawnMove[] | undefined => {
+const getPseudoLegalMoves = (tileId: Square): Move[] | undefined => {
 	const piece = gameState.boardState.piecePlacement[tileId];
 	if (piece === undefined) {
 		return undefined;
@@ -119,4 +125,4 @@ const getPseudoLegalMoves = (tileId: Square): PawnMove[] | undefined => {
 		default:
 			return undefined;
 	}
-}
+};

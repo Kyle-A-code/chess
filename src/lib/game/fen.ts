@@ -1,6 +1,8 @@
 import type { BoardState, Piece, PiecePlacement, Side } from '../types';
 import { FILES, isSquare, PIECES, RANKS_REVERSE, type Rank, type Square } from './boardPrimitives';
 
+export const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
 const validPiecePlacementChars = new Set([
 	'1',
 	'2',

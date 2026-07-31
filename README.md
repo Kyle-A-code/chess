@@ -14,7 +14,7 @@ Build an interactive chess experience as an opportunity to learn more about svel
 - [x] **Milestone 4:** Drag and Drop Movement
 - [x] **Milestone 5:** FEN Parsing and Text-File Persistence
 - [ ] **Milestone 6:** Legal Move Engine
-  - [ ] Add pawn move generator, including en passant target setting
+  - [x] Add pawn move generator, including en passant target setting
   - [ ] Add knight move generator
   - [ ] Add bishop move generator
   - [ ] Add queen move generator
