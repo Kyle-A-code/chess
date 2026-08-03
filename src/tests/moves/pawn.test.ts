@@ -1,19 +1,9 @@
 import { beforeEach, describe, expect, test } from 'vitest';
 import { processPawnMove, pseudoLegalPawnMoves } from '../../lib/moves/pawn';
-import type { BoardState, PiecePlacement, Side, Tile } from '../../lib/types';
+import type { BoardState, PiecePlacement, Side } from '../../lib/types';
 import type { Square } from '../../lib/game/boardPrimitives';
-
-const createBoardState = (
-	piecePlacement: PiecePlacement,
-	enPassantTarget?: Square,
-	activeSide: Side = 'w'
-): BoardState => ({
-	piecePlacement,
-	activeSide,
-	enPassantTarget,
-	halfMoveClock: 0,
-	fullMoveNumber: 1
-});
+import { createBoardState } from '../helpers/createBoardState';
+import { runInvalidTileTests } from './helpers/runInvalidTileTests';
 
 type MoveContextOptions = {
 	pawnSquare: Square;
@@ -27,20 +17,13 @@ const subject = ({ pawnSquare, side, extras = {}, enPassantTarget }: MoveContext
 		[pawnSquare]: { type: 'pawn', side },
 		...extras
 	};
-	const boardState = createBoardState(piecePlacement, enPassantTarget);
+	const boardState = createBoardState(piecePlacement, { enPassantTarget });
 	return pseudoLegalPawnMoves(boardState, pawnSquare);
 };
 
-describe('Given an invalid tile is provided', () => {
-	const boardState = createBoardState({ ['e2']: { type: 'rook', side: 'w' } });
-	test('When tile piece is not a pawn, Then it should throw tile is not a pawn', () => {
-		expect(() => pseudoLegalPawnMoves(boardState, 'e2')).toThrow('Tile is not a pawn');
-	});
-
-	test('When tile id is invalid, Then it should throw invalid tile', () => {
-		// @ts-expect-error testing runtime guard for invalid tile id
-		expect(() => pseudoLegalPawnMoves(boardState, 'z9')).toThrow('Invalid tile');
-	});
+runInvalidTileTests({
+	moveGenerator: pseudoLegalPawnMoves,
+	expectedPieceError: 'Tile is not a pawn'
 });
 
 describe('Given a valid pawn tile is provided', () => {
@@ -324,7 +307,7 @@ describe('Given processing pawn move side effects', () => {
 	});
 
 	test('When move is a promotion for black side to move, Then it should place a black queen on destination square', () => {
-		boardState = createBoardState({}, undefined, 'b');
+		boardState = createBoardState({}, { activeSide: 'b' });
 		processPawnMove(boardState, { to: 'e1', isPromotion: true });
 		expect(boardState.piecePlacement.e1).toEqual({ type: 'queen', side: 'b' });
 	});
