@@ -26,7 +26,4 @@ export interface BoardState {
 
 export interface Move {
 	to: Square;
-	isPromotion?: boolean;
-	enPassantTarget?: Square;
-	enPassantCapture?: Square;
 }

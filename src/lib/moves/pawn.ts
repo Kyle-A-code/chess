@@ -10,6 +10,12 @@ import {
 	type Square
 } from '../game/boardPrimitives';
 
+interface PawnMove extends Move {
+	isPromotion?: boolean;
+	enPassantTarget?: Square;
+	enPassantCapture?: Square;
+}
+
 const isFirstMove = (side: Side, rank: Rank) => {
 	return side === 'w' ? rank === '2' : rank === '7';
 };
@@ -23,7 +29,7 @@ const getCaptureMove = (
 	side: Side,
 	targetSquare: Square,
 	targetRank: Rank
-): Move | undefined => {
+): PawnMove | undefined => {
 	const targetPiece = boardState.piecePlacement[targetSquare];
 	if (targetPiece === undefined || targetPiece.side === side) return undefined;
 
@@ -36,7 +42,7 @@ const getEnPassantMove = (
 	targetFile: File,
 	currentRank: Rank,
 	targetSquare: Square
-): Move | undefined => {
+): PawnMove | undefined => {
 	const adjacentSquare = `${targetFile}${currentRank}`;
 	if (
 		boardState.enPassantTarget === undefined ||
@@ -58,7 +64,7 @@ const getDiagonalMove = (
 	targetFile: File,
 	currentRank: Rank,
 	targetRank: Rank
-): Move | undefined => {
+): PawnMove | undefined => {
 	const targetSquare = `${targetFile}${targetRank}`;
 	if (!isSquare(targetSquare)) return undefined;
 
@@ -76,8 +82,8 @@ const getPseudoLegalMoves = (
 	side: Side,
 	file: File,
 	rank: Rank
-): Move[] => {
-	const moves: Move[] = [];
+): PawnMove[] => {
+	const moves: PawnMove[] = [];
 	const direction = side === 'w' ? 1 : -1;
 	const rankIdx = RANKS.indexOf(rank);
 	const fileIdx = FILES.indexOf(file);
@@ -119,7 +125,7 @@ export const pseudoLegalPawnMoves = (boardState: BoardState, square: Square) => 
 	return getPseudoLegalMoves(boardState, side, file, rank);
 };
 
-export const processPawnMove = (boardState: BoardState, move: Move) => {
+export const processPawnMove = (boardState: BoardState, move: PawnMove) => {
 	if (move.enPassantTarget !== undefined) {
 		boardState.enPassantTarget = move.enPassantTarget;
 	}
