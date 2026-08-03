@@ -1,13 +1,18 @@
+import { pseudoLegalKnightMoves } from '../moves/knight.js';
 import { processPawnMove, pseudoLegalPawnMoves } from '../moves/pawn.js';
 import type { BoardState, Move } from '../types.ts';
 import type { Square } from './boardPrimitives';
+import { isSquare } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
 
 const FEN_STRING_STORAGE_KEY = 'fenString';
 
+type PseudoLegalMoves = Partial<Record<Square, Move[]>>;
+
 interface GameState {
 	selectedTileId: Square | undefined;
 	boardState: BoardState;
+	pseudoLegalMoves: PseudoLegalMoves;
 }
 
 const getStoredFen = (): string | null => {
@@ -31,11 +36,32 @@ const persistFen = (fen: string) => {
 	localStorage.setItem(FEN_STRING_STORAGE_KEY, fen);
 };
 
+const getPseudoLegalMoves = (boardState: BoardState): PseudoLegalMoves => {
+	const pseudoLegalMoves: PseudoLegalMoves = {};
+	Object.entries(boardState.piecePlacement).forEach(([square, piece]) => {
+		if (piece === undefined || !isSquare(square) || piece.side !== boardState.activeSide) {
+			return;
+		}
+		switch (piece.type) {
+			case 'pawn':
+				pseudoLegalMoves[square] = pseudoLegalPawnMoves(boardState, square);
+				break;
+			case 'knight':
+				pseudoLegalMoves[square] = pseudoLegalKnightMoves(boardState, square);
+				break;
+		}
+	});
+	return pseudoLegalMoves;
+};
+
 const createNewGameState = (): GameState => {
 	const storedBoardState = getStoredFen();
+	const boardState = fenToBoardState(storedBoardState || START_FEN);
+	const pseudoLegalMoves = getPseudoLegalMoves(boardState);
 	return {
 		selectedTileId: undefined,
-		boardState: fenToBoardState(storedBoardState || START_FEN)
+		boardState,
+		pseudoLegalMoves
 	};
 };
 
@@ -46,6 +72,7 @@ export const resetGame = () => {
 	const resetState = createNewGameState();
 	gameState.selectedTileId = resetState.selectedTileId;
 	gameState.boardState = resetState.boardState;
+	gameState.pseudoLegalMoves = getPseudoLegalMoves(gameState.boardState);
 };
 
 export const selectTile = (tileId: Square) => {
@@ -67,7 +94,7 @@ export const selectTile = (tileId: Square) => {
 		if (targetTile?.side === gameState.boardState.activeSide) {
 			return;
 		}
-		const moves = getPseudoLegalMoves(gameState.selectedTileId);
+		const moves = gameState.pseudoLegalMoves[gameState.selectedTileId];
 
 		// TODO: once all move types are implemented, we can just return if moves are undefined
 		const attemptedMove = moves?.find((move) => move.to === tileId);
@@ -103,6 +130,7 @@ const nextTurn = () => {
 		gameState.boardState.activeSide = 'w';
 		gameState.boardState.fullMoveNumber++;
 	}
+	gameState.pseudoLegalMoves = getPseudoLegalMoves(gameState.boardState);
 };
 
 const deselectTile = () => {
@@ -112,17 +140,4 @@ const deselectTile = () => {
 const persistBoardState = () => {
 	const fenString = boardStateToFen(gameState.boardState);
 	persistFen(fenString);
-};
-
-const getPseudoLegalMoves = (tileId: Square): Move[] | undefined => {
-	const piece = gameState.boardState.piecePlacement[tileId];
-	if (piece === undefined) {
-		return undefined;
-	}
-	switch (piece.type) {
-		case 'pawn':
-			return pseudoLegalPawnMoves(gameState.boardState, tileId);
-		default:
-			return undefined;
-	}
 };
