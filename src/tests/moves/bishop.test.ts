@@ -31,7 +31,21 @@ describe('Given a valid bishop tile is provided', () => {
 		const moves = subject({ bishopSquare: 'd4', side: 'w' });
 		const destinations = moves.map((move) => move.to).sort();
 
-		expect(destinations).toEqual(['a1', 'a7', 'b2', 'b6', 'c3', 'c5', 'e3', 'e5', 'f2', 'f6', 'g1', 'g7', 'h8']);
+		expect(destinations).toEqual([
+			'a1',
+			'a7',
+			'b2',
+			'b6',
+			'c3',
+			'c5',
+			'e3',
+			'e5',
+			'f2',
+			'f6',
+			'g1',
+			'g7',
+			'h8'
+		]);
 		expect(moves).toHaveLength(13);
 	});
 

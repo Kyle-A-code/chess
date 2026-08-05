@@ -1,6 +1,6 @@
-import { squareToFileRank, type Square } from "../game/boardPrimitives";
-import type { BoardState } from "../types";
-import { getDiagonalMoves } from "./helpers/diagonals";
+import { squareToFileRank, type Square } from '../game/boardPrimitives';
+import type { BoardState } from '../types';
+import { getDiagonalMoves } from './helpers/diagonals';
 
 export const pseudoLegalBishopMoves = (boardState: BoardState, square: Square) => {
 	const [file, rank] = squareToFileRank(square);

@@ -21,7 +21,21 @@ export const runDiagonalMoveTests = ({ subject }: RunDiagonalMoveTestsArgs) => {
 			const destinations = moves.map((move) => move.to);
 
 			expect(destinations).toEqual(
-				expect.arrayContaining(['a1', 'a7', 'b2', 'b6', 'c3', 'c5', 'e3', 'e5', 'f2', 'f6', 'g1', 'g7', 'h8'])
+				expect.arrayContaining([
+					'a1',
+					'a7',
+					'b2',
+					'b6',
+					'c3',
+					'c5',
+					'e3',
+					'e5',
+					'f2',
+					'f6',
+					'g1',
+					'g7',
+					'h8'
+				])
 			);
 		});
 

@@ -12,7 +12,10 @@ type RunInvalidTileTestsArgs = {
 	expectedPieceError: string;
 };
 
-export const runInvalidTileTests = ({ moveGenerator, expectedPieceError }: RunInvalidTileTestsArgs) => {
+export const runInvalidTileTests = ({
+	moveGenerator,
+	expectedPieceError
+}: RunInvalidTileTestsArgs) => {
 	describe('Given an invalid tile is provided', () => {
 		const piecePlacement: PiecePlacement = {
 			// @ts-expect-error testing runtime guard for invalid piece type
