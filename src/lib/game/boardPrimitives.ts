@@ -25,3 +25,9 @@ export const isSquare = (value: string): value is Square => {
 	const [file, rank] = value.split('');
 	return isFile(file) && isRank(rank);
 };
+
+export const squareToFileRank = (square: Square): [File, Rank] => {
+	const [file, rank] = square.split('');
+	if (!isFile(file) || !isRank(rank)) throw new Error('Invalid square');
+	return [file, rank];
+};

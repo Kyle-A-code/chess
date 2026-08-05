@@ -7,7 +7,8 @@ import {
 	isSquare,
 	type Rank,
 	type File,
-	type Square
+	type Square,
+	squareToFileRank
 } from '../game/boardPrimitives';
 
 interface PawnMove extends Move {
@@ -117,8 +118,7 @@ const getPseudoLegalMoves = (
 };
 
 export const pseudoLegalPawnMoves = (boardState: BoardState, square: Square) => {
-	const [file, rank] = square.split('');
-	if (!isFile(file) || !isRank(rank)) throw new Error('Invalid tile');
+	const [file, rank] = squareToFileRank(square);
 	const piece = boardState.piecePlacement[square];
 	if (piece?.type !== 'pawn') throw new Error('Tile is not a pawn');
 	const side = piece.side;

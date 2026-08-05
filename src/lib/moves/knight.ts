@@ -2,8 +2,7 @@ import type { BoardState, Side, Move } from '../types';
 import {
 	RANKS,
 	FILES,
-	isRank,
-	isFile,
+	squareToFileRank,
 	isSquare,
 	type Rank,
 	type File,
@@ -42,8 +41,7 @@ const getPseudoLegalMoves = (
 };
 
 export const pseudoLegalKnightMoves = (boardState: BoardState, square: Square) => {
-	const [file, rank] = square.split('');
-	if (!isFile(file) || !isRank(rank)) throw new Error('Invalid tile');
+	const [file, rank] = squareToFileRank(square);
 	const piece = boardState.piecePlacement[square];
 	if (piece?.type !== 'knight') throw new Error('Tile is not a knight');
 	const side = piece.side;

@@ -26,7 +26,7 @@ export const runInvalidTileTests = ({ moveGenerator, expectedPieceError }: RunIn
 
 		test('When tile id is invalid, Then it should throw invalid tile', () => {
 			// @ts-expect-error testing runtime guard for invalid tile id
-			expect(() => moveGenerator(boardState, 'z9')).toThrow('Invalid tile');
+			expect(() => moveGenerator(boardState, 'z9')).toThrow('Invalid square');
 		});
 	});
 };

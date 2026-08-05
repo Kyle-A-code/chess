@@ -1,6 +1,6 @@
-import { pseudoLegalKnightMoves } from '../moves/knight.js';
-import { processPawnMove, pseudoLegalPawnMoves } from '../moves/pawn.js';
-import type { BoardState, Move } from '../types.ts';
+import { pseudoLegalKnightMoves } from '../moves/knight';
+import { processPawnMove, pseudoLegalPawnMoves } from '../moves/pawn';
+import type { BoardState, Move } from '../types';
 import type { Square } from './boardPrimitives';
 import { isSquare } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
