@@ -1,13 +1,10 @@
-import { pseudoLegalKnightMoves } from '../moves/knight';
-import { processPawnMove, pseudoLegalPawnMoves } from '../moves/pawn';
-import type { BoardState, Move } from '../types';
+import { processPawnMove } from '../moves/pawn';
+import type { BoardState, Move, PseudoLegalMoves } from '../types';
 import type { Square } from './boardPrimitives';
-import { isSquare } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
+import { getPseudoLegalMoves } from '../moves/moves';
 
 const FEN_STRING_STORAGE_KEY = 'fenString';
-
-type PseudoLegalMoves = Partial<Record<Square, Move[]>>;
 
 interface GameState {
 	selectedTileId: Square | undefined;
@@ -34,24 +31,6 @@ const persistFen = (fen: string) => {
 		return;
 	}
 	localStorage.setItem(FEN_STRING_STORAGE_KEY, fen);
-};
-
-const getPseudoLegalMoves = (boardState: BoardState): PseudoLegalMoves => {
-	const pseudoLegalMoves: PseudoLegalMoves = {};
-	Object.entries(boardState.piecePlacement).forEach(([square, piece]) => {
-		if (piece === undefined || !isSquare(square) || piece.side !== boardState.activeSide) {
-			return;
-		}
-		switch (piece.type) {
-			case 'pawn':
-				pseudoLegalMoves[square] = pseudoLegalPawnMoves(boardState, square);
-				break;
-			case 'knight':
-				pseudoLegalMoves[square] = pseudoLegalKnightMoves(boardState, square);
-				break;
-		}
-	});
-	return pseudoLegalMoves;
 };
 
 const createNewGameState = (): GameState => {

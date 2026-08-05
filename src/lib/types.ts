@@ -27,3 +27,5 @@ export interface BoardState {
 export interface Move {
 	to: Square;
 }
+
+export type PseudoLegalMoves = Partial<Record<Square, Move[]>>;
