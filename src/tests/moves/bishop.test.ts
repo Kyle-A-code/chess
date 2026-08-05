@@ -4,6 +4,7 @@ import type { Square } from '../../lib/game/boardPrimitives';
 import { pseudoLegalBishopMoves } from '../../lib/moves/bishop';
 import { createBoardState } from '../helpers/createBoardState';
 import { runInvalidTileTests } from './helpers/runInvalidTileTests';
+import { runDiagonalMoveTests } from './helpers/runDiagonalMoveTests';
 
 type MoveContextOptions = {
 	bishopSquare: Square;
@@ -47,54 +48,8 @@ describe('Given a valid bishop tile is provided', () => {
 			expect(moves).toHaveLength(expectedDestinations.length);
 		}
 	);
+});
 
-	test('When a same side piece blocks a diagonal, Then it should not include blocker square or any squares beyond', () => {
-		const moves = subject({
-			bishopSquare: 'd4',
-			side: 'w',
-			extras: { f6: { type: 'pawn', side: 'w' } }
-		});
-
-		expect(moves).toContainEqual({ to: 'e5' });
-		expect(moves).not.toContainEqual({ to: 'f6' });
-		expect(moves).not.toContainEqual({ to: 'g7' });
-		expect(moves).not.toContainEqual({ to: 'h8' });
-	});
-
-	test('When an enemy piece blocks a diagonal, Then it should include capture square and exclude squares beyond', () => {
-		const moves = subject({
-			bishopSquare: 'd4',
-			side: 'w',
-			extras: { f6: { type: 'pawn', side: 'b' } }
-		});
-
-		expect(moves).toContainEqual({ to: 'e5' });
-		expect(moves).toContainEqual({ to: 'f6' });
-		expect(moves).not.toContainEqual({ to: 'g7' });
-		expect(moves).not.toContainEqual({ to: 'h8' });
-	});
-
-	test('When an adjacent same side piece blocks a diagonal, Then it should block all squares in that direction', () => {
-		const moves = subject({
-			bishopSquare: 'd4',
-			side: 'w',
-			extras: { c5: { type: 'pawn', side: 'w' } }
-		});
-
-		expect(moves).not.toContainEqual({ to: 'c5' });
-		expect(moves).not.toContainEqual({ to: 'b6' });
-		expect(moves).not.toContainEqual({ to: 'a7' });
-	});
-
-	test('When an adjacent enemy piece is on a diagonal, Then it should include capture square and block all beyond', () => {
-		const moves = subject({
-			bishopSquare: 'd4',
-			side: 'w',
-			extras: { c5: { type: 'pawn', side: 'b' } }
-		});
-
-		expect(moves).toContainEqual({ to: 'c5' });
-		expect(moves).not.toContainEqual({ to: 'b6' });
-		expect(moves).not.toContainEqual({ to: 'a7' });
-	});
+runDiagonalMoveTests({
+	subject: ({ square, side, extras }) => subject({ bishopSquare: square, side, extras })
 });

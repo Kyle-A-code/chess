@@ -16,13 +16,13 @@ Build an interactive chess experience as an opportunity to learn more about svel
 - [ ] **Milestone 6:** Legal Move Engine
   - [x] Add pawn move generator, including en passant target setting
   - [x] Add knight move generator
-  - [ ] Add bishop move generator
-  - [ ] Add queen move generator
+  - [x] Add bishop move generator
+  - [x] Add queen move generator
   - [ ] Add rook move generator, including castling availability
   - [ ] Add king move generator, including castling availability
   - [ ] Check all generated pseudo legal moves and filter down to legal moves
   - [ ] Add halfmove counter updates (reset on pawn move/capture, increment otherwise)
-  - [ ] Add promotion logic (auto queen promotion)
+  - [x] Add promotion logic (auto queen promotion)
 - [ ] **Milestone 7:** Game Completion Logic
   - [ ] Add checkmate detection
   - [ ] Add stalemate detection
