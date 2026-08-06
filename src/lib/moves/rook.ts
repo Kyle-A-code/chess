@@ -16,18 +16,19 @@ export const pseudoLegalRookMoves = (boardState: BoardState, square: Square) => 
 };
 
 export const handleRookSideEffects = (boardState: BoardState, square: Square) => {
-  if (boardState.castlingAvailability === undefined || boardState.castlingAvailability === '') return;
+	if (boardState.castlingAvailability === undefined || boardState.castlingAvailability === '')
+		return;
 
-  if (square === WHITE_LEFT_STARTING_SQUARE && boardState.castlingAvailability.includes('Q')) {
-    boardState.castlingAvailability = boardState.castlingAvailability.replace('Q', '');
-  }
-  if (square === WHITE_RIGHT_STARTING_SQUARE && boardState.castlingAvailability.includes('K')) {
-    boardState.castlingAvailability = boardState.castlingAvailability.replace('K', '');
-  }
-  if (square === BLACK_LEFT_STARTING_SQUARE && boardState.castlingAvailability.includes('q')) {
-    boardState.castlingAvailability = boardState.castlingAvailability.replace('q', '');
-  }
-  if (square === BLACK_RIGHT_STARTING_SQUARE && boardState.castlingAvailability.includes('k')) {
-    boardState.castlingAvailability = boardState.castlingAvailability.replace('k', '');
-  }
+	if (square === WHITE_LEFT_STARTING_SQUARE && boardState.castlingAvailability.includes('Q')) {
+		boardState.castlingAvailability = boardState.castlingAvailability.replace('Q', '');
+	}
+	if (square === WHITE_RIGHT_STARTING_SQUARE && boardState.castlingAvailability.includes('K')) {
+		boardState.castlingAvailability = boardState.castlingAvailability.replace('K', '');
+	}
+	if (square === BLACK_LEFT_STARTING_SQUARE && boardState.castlingAvailability.includes('q')) {
+		boardState.castlingAvailability = boardState.castlingAvailability.replace('q', '');
+	}
+	if (square === BLACK_RIGHT_STARTING_SQUARE && boardState.castlingAvailability.includes('k')) {
+		boardState.castlingAvailability = boardState.castlingAvailability.replace('k', '');
+	}
 };

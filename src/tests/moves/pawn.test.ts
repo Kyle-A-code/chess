@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
-import { processPawnMove, pseudoLegalPawnMoves } from '../../lib/moves/pawn';
+import { handlePawnSideEffects, pseudoLegalPawnMoves } from '../../lib/moves/pawn';
 import type { BoardState, PiecePlacement, Side } from '../../lib/types';
 import type { Square } from '../../lib/game/boardPrimitives';
 import { createBoardState } from '../helpers/createBoardState';
@@ -291,42 +291,42 @@ describe('Given processing pawn move side effects', () => {
 	});
 
 	test('When move includes an en passant target, Then it should set the board en passant target', () => {
-		processPawnMove(boardState, { to: 'e4', enPassantTarget: 'e3' });
+		handlePawnSideEffects(boardState, { to: 'e4', enPassantTarget: 'e3' });
 		expect(boardState.enPassantTarget).toBe('e3');
 	});
 
 	test('When move omits an en passant target, Then it should keep the existing board en passant target', () => {
 		boardState.enPassantTarget = 'd6';
-		processPawnMove(boardState, { to: 'e4' });
+		handlePawnSideEffects(boardState, { to: 'e4' });
 		expect(boardState.enPassantTarget).toBe('d6');
 	});
 
 	test('When move is a promotion for white side to move, Then it should place a white queen on destination square', () => {
-		processPawnMove(boardState, { to: 'e8', isPromotion: true });
+		handlePawnSideEffects(boardState, { to: 'e8', isPromotion: true });
 		expect(boardState.piecePlacement.e8).toEqual({ type: 'queen', side: 'w' });
 	});
 
 	test('When move is a promotion for black side to move, Then it should place a black queen on destination square', () => {
 		boardState = createBoardState({}, { activeSide: 'b' });
-		processPawnMove(boardState, { to: 'e1', isPromotion: true });
+		handlePawnSideEffects(boardState, { to: 'e1', isPromotion: true });
 		expect(boardState.piecePlacement.e1).toEqual({ type: 'queen', side: 'b' });
 	});
 
 	test('When move is not a promotion, Then it should not replace destination square with a queen', () => {
 		boardState.piecePlacement.e5 = { type: 'rook', side: 'b' };
-		processPawnMove(boardState, { to: 'e5' });
+		handlePawnSideEffects(boardState, { to: 'e5' });
 		expect(boardState.piecePlacement.e5).toEqual({ type: 'rook', side: 'b' });
 	});
 
 	test('When move includes en passant capture square, Then it should remove the captured pawn square', () => {
 		boardState.piecePlacement.d5 = { type: 'pawn', side: 'b' };
-		processPawnMove(boardState, { to: 'd6', enPassantCapture: 'd5' });
+		handlePawnSideEffects(boardState, { to: 'd6', enPassantCapture: 'd5' });
 		expect(boardState.piecePlacement.d5).toBeUndefined();
 	});
 
 	test('When move omits en passant capture square, Then it should keep adjacent pieces unchanged', () => {
 		boardState.piecePlacement.d5 = { type: 'pawn', side: 'b' };
-		processPawnMove(boardState, { to: 'd6' });
+		handlePawnSideEffects(boardState, { to: 'd6' });
 		expect(boardState.piecePlacement.d5).toEqual({ type: 'pawn', side: 'b' });
 	});
 });

@@ -125,7 +125,7 @@ export const pseudoLegalPawnMoves = (boardState: BoardState, square: Square) => 
 	return getPseudoLegalMoves(boardState, side, file, rank);
 };
 
-export const processPawnMove = (boardState: BoardState, move: PawnMove) => {
+export const handlePawnSideEffects = (boardState: BoardState, move: PawnMove) => {
 	if (move.enPassantTarget !== undefined) {
 		boardState.enPassantTarget = move.enPassantTarget;
 	}

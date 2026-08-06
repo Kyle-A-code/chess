@@ -1,4 +1,4 @@
-import { processPawnMove } from '../moves/pawn';
+import { handlePawnSideEffects } from '../moves/pawn';
 import type { BoardState, Move, PseudoLegalMoves } from '../types';
 import type { Square } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
@@ -102,7 +102,7 @@ const processMove = (move: Move, selectedTileId: Square) => {
 	gameState.boardState.piecePlacement[move.to] = selectedPiece;
 
 	if (selectedPiece?.type === 'pawn') {
-		processPawnMove(gameState.boardState, move);
+		handlePawnSideEffects(gameState.boardState, move);
 	}
 	if (selectedPiece?.type === 'rook') {
 		handleRookSideEffects(gameState.boardState, selectedTileId);
@@ -111,7 +111,6 @@ const processMove = (move: Move, selectedTileId: Square) => {
 	if (capturedPiece?.type === 'rook') {
 		handleRookSideEffects(gameState.boardState, move.to);
 	}
-	console.log(gameState.boardState.castlingAvailability);
 };
 
 const nextTurn = () => {
