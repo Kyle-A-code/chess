@@ -3,6 +3,7 @@ import type { BoardState, Move, PseudoLegalMoves } from '../types';
 import type { Square } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
 import { getPseudoLegalMoves } from '../moves/moves';
+import { handleRookSideEffects } from '../moves/rook';
 
 const FEN_STRING_STORAGE_KEY = 'fenString';
 
@@ -89,17 +90,28 @@ export const selectTile = (tileId: Square) => {
 	}
 };
 
+// TODO: this function needs refactoring into concise helpers, holding off until all move types and check logic is implemented
+// To ensure correct abstraction for handling move processing and side effects
 const processMove = (move: Move, selectedTileId: Square) => {
 	gameState.boardState.enPassantTarget = undefined;
 
 	const selectedPiece = gameState.boardState.piecePlacement[selectedTileId];
 	gameState.boardState.piecePlacement[selectedTileId] = undefined;
 	// TODO: increment score counter by removed piece if capturing
+	const capturedPiece = gameState.boardState.piecePlacement[move.to];
 	gameState.boardState.piecePlacement[move.to] = selectedPiece;
 
 	if (selectedPiece?.type === 'pawn') {
 		processPawnMove(gameState.boardState, move);
 	}
+	if (selectedPiece?.type === 'rook') {
+		handleRookSideEffects(gameState.boardState, selectedTileId);
+	}
+
+	if (capturedPiece?.type === 'rook') {
+		handleRookSideEffects(gameState.boardState, move.to);
+	}
+	console.log(gameState.boardState.castlingAvailability);
 };
 
 const nextTurn = () => {

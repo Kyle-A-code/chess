@@ -18,7 +18,7 @@ Build an interactive chess experience as an opportunity to learn more about svel
   - [x] Add knight move generator
   - [x] Add bishop move generator
   - [x] Add queen move generator
-  - [ ] Add rook move generator, including castling availability
+  - [x] Add rook move generator, including castling availability
   - [ ] Add king move generator, including castling availability
   - [ ] Check all generated pseudo legal moves and filter down to legal moves
   - [ ] Add halfmove counter updates (reset on pawn move/capture, increment otherwise)

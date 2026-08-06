@@ -4,6 +4,7 @@ import { pseudoLegalPawnMoves } from '../moves/pawn';
 import { isSquare } from '../game/boardPrimitives';
 import type { BoardState, PseudoLegalMoves } from '../types';
 import { pseudoLegalQueenMoves } from './queen';
+import { pseudoLegalRookMoves } from './rook';
 
 export const getPseudoLegalMoves = (boardState: BoardState): PseudoLegalMoves => {
 	const pseudoLegalMoves: PseudoLegalMoves = {};
@@ -20,6 +21,9 @@ export const getPseudoLegalMoves = (boardState: BoardState): PseudoLegalMoves =>
 				break;
 			case 'bishop':
 				pseudoLegalMoves[square] = pseudoLegalBishopMoves(boardState, square);
+				break;
+			case 'rook':
+				pseudoLegalMoves[square] = pseudoLegalRookMoves(boardState, square);
 				break;
 			case 'queen':
 				pseudoLegalMoves[square] = pseudoLegalQueenMoves(boardState, square);
