@@ -1,9 +1,7 @@
-import { handlePawnSideEffects } from '../moves/pawn';
-import type { BoardState, Move, PseudoLegalMoves } from '../types';
+import type { BoardState, PseudoLegalMoves } from '../types';
 import type { Square } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
-import { getPseudoLegalMoves } from '../moves/moves';
-import { handleRookSideEffects } from '../moves/rook';
+import { getPseudoLegalMoves, processMove } from '../moves/moves';
 
 const FEN_STRING_STORAGE_KEY = 'fenString';
 
@@ -67,7 +65,6 @@ export const selectTile = (tileId: Square) => {
 	}
 
 	if (gameState.selectedTileId !== undefined) {
-		// TODO: this is a naive implementation implement legal move checking
 		// TODO: set half move counter, castling availability
 
 		const targetTile = gameState.boardState.piecePlacement[tileId];
@@ -83,33 +80,10 @@ export const selectTile = (tileId: Square) => {
 			return;
 		}
 
-		processMove(attemptedMove, gameState.selectedTileId);
+		processMove(gameState.boardState, attemptedMove, gameState.selectedTileId);
 		deselectTile();
 		nextTurn();
 		persistBoardState();
-	}
-};
-
-// TODO: this function needs refactoring into concise helpers, holding off until all move types and check logic is implemented
-// To ensure correct abstraction for handling move processing and side effects
-const processMove = (move: Move, selectedTileId: Square) => {
-	gameState.boardState.enPassantTarget = undefined;
-
-	const selectedPiece = gameState.boardState.piecePlacement[selectedTileId];
-	gameState.boardState.piecePlacement[selectedTileId] = undefined;
-	// TODO: increment score counter by removed piece if capturing
-	const capturedPiece = gameState.boardState.piecePlacement[move.to];
-	gameState.boardState.piecePlacement[move.to] = selectedPiece;
-
-	if (selectedPiece?.type === 'pawn') {
-		handlePawnSideEffects(gameState.boardState, move);
-	}
-	if (selectedPiece?.type === 'rook') {
-		handleRookSideEffects(gameState.boardState, selectedTileId);
-	}
-
-	if (capturedPiece?.type === 'rook') {
-		handleRookSideEffects(gameState.boardState, move.to);
 	}
 };
 
