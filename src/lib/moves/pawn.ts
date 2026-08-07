@@ -2,7 +2,6 @@ import type { BoardState, Side, Move } from '../types';
 import {
 	RANKS,
 	FILES,
-	isRank,
 	isFile,
 	isSquare,
 	type Rank,
