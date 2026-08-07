@@ -1,4 +1,4 @@
-import type { BoardState, Side, Move } from '../types';
+import type { BoardState, Side, KingMove } from '../types';
 import {
 	RANKS,
 	FILES,
@@ -8,12 +8,6 @@ import {
 	type Square,
 	squareToFileRank
 } from '../game/boardPrimitives';
-
-interface KingMove extends Move {
-	isPromotion?: boolean;
-	isCastlingQueenside?: boolean;
-	isCastlingKingside?: boolean;
-}
 
 const DIRECTIONS = [
 	[1, 0],

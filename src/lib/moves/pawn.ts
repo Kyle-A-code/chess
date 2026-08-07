@@ -1,4 +1,4 @@
-import type { BoardState, Side, Move } from '../types';
+import type { BoardState, Side, PawnMove } from '../types';
 import {
 	RANKS,
 	FILES,
@@ -9,12 +9,6 @@ import {
 	type Square,
 	squareToFileRank
 } from '../game/boardPrimitives';
-
-interface PawnMove extends Move {
-	isPromotion?: boolean;
-	enPassantTarget?: Square;
-	enPassantCapture?: Square;
-}
 
 const isFirstMove = (side: Side, rank: Rank) => {
 	return side === 'w' ? rank === '2' : rank === '7';

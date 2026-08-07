@@ -1,14 +1,14 @@
-import type { BoardState, PseudoLegalMoves } from '../types';
+import type { BoardState, Moves } from '../types';
 import type { Square } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
-import { getPseudoLegalMoves, processMove } from '../moves/moves';
+import { getLegalMoves, processMove } from '../moves/moves';
 
 const FEN_STRING_STORAGE_KEY = 'fenString';
 
 interface GameState {
 	selectedTileId: Square | undefined;
 	boardState: BoardState;
-	pseudoLegalMoves: PseudoLegalMoves;
+	moves: Moves;
 }
 
 const getStoredFen = (): string | null => {
@@ -35,11 +35,11 @@ const persistFen = (fen: string) => {
 const createNewGameState = (): GameState => {
 	const storedBoardState = getStoredFen();
 	const boardState = fenToBoardState(storedBoardState || START_FEN);
-	const pseudoLegalMoves = getPseudoLegalMoves(boardState);
+	const moves = getLegalMoves(boardState);
 	return {
 		selectedTileId: undefined,
 		boardState,
-		pseudoLegalMoves
+		moves
 	};
 };
 
@@ -50,7 +50,7 @@ export const resetGame = () => {
 	const resetState = createNewGameState();
 	gameState.selectedTileId = resetState.selectedTileId;
 	gameState.boardState = resetState.boardState;
-	gameState.pseudoLegalMoves = getPseudoLegalMoves(gameState.boardState);
+	gameState.moves = getLegalMoves(gameState.boardState);
 };
 
 export const selectTile = (tileId: Square) => {
@@ -71,7 +71,7 @@ export const selectTile = (tileId: Square) => {
 		if (targetTile?.side === gameState.boardState.activeSide) {
 			return;
 		}
-		const moves = gameState.pseudoLegalMoves[gameState.selectedTileId];
+		const moves = gameState.moves[gameState.selectedTileId];
 
 		// TODO: once all move types are implemented, we can just return if moves are undefined
 		const attemptedMove = moves?.find((move) => move.to === tileId);
@@ -94,7 +94,7 @@ const nextTurn = () => {
 		gameState.boardState.activeSide = 'w';
 		gameState.boardState.fullMoveNumber++;
 	}
-	gameState.pseudoLegalMoves = getPseudoLegalMoves(gameState.boardState);
+	gameState.moves = getLegalMoves(gameState.boardState);
 };
 
 const deselectTile = () => {

@@ -24,8 +24,22 @@ export interface BoardState {
 	fullMoveNumber: number;
 }
 
-export interface Move {
+export interface BaseMove {
 	to: Square;
 }
 
-export type PseudoLegalMoves = Partial<Record<Square, Move[]>>;
+export interface PawnMove extends BaseMove {
+	isPromotion?: boolean;
+	enPassantTarget?: Square;
+	enPassantCapture?: Square;
+}
+
+export interface KingMove extends BaseMove {
+	isPromotion?: boolean;
+	isCastlingQueenside?: boolean;
+	isCastlingKingside?: boolean;
+}
+
+export type Move = BaseMove | PawnMove | KingMove;
+
+export type Moves = Partial<Record<Square, Move[]>>;

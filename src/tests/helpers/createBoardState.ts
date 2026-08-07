@@ -1,4 +1,4 @@
-import type { BoardState, PiecePlacement, Side } from '../../lib/types';
+import type { BoardState, Piece, PiecePlacement, Side } from '../../lib/types';
 import type { Square } from '../../lib/game/boardPrimitives';
 
 type CreateBoardStateOptions = {
