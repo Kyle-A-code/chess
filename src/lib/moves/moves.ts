@@ -2,7 +2,7 @@ import { pseudoLegalKnightMoves } from '../moves/knight';
 import { pseudoLegalBishopMoves } from '../moves/bishop';
 import { handlePawnSideEffects, pseudoLegalPawnMoves } from '../moves/pawn';
 import { isSquare, type Square } from '../game/boardPrimitives';
-import type { BoardState, KingMove, Move, Moves, Side } from '../types';
+import type { BoardState, KingMove, Move, Moves, PawnMove, Piece, Side } from '../types';
 import { pseudoLegalQueenMoves } from './queen';
 import { handleRookSideEffects, pseudoLegalRookMoves } from './rook';
 import {
@@ -63,8 +63,10 @@ export const processMove = (boardState: BoardState, move: Move, currentSquare: S
 	boardState.enPassantTarget = undefined;
 
 	const selectedPiece = boardState.piecePlacement[currentSquare];
+	if (!selectedPiece) throw new Error('Selected piece not found');
+
 	boardState.piecePlacement[currentSquare] = undefined;
-	// TODO: increment score counter by removed piece if capturing
+
 	const capturedPiece = boardState.piecePlacement[move.to];
 	boardState.piecePlacement[move.to] = selectedPiece;
 
@@ -81,6 +83,21 @@ export const processMove = (boardState: BoardState, move: Move, currentSquare: S
 
 	if (selectedPiece?.type === 'king') {
 		handleKingSideEffects(boardState, move);
+	}
+
+	incrementHalfMoveClock(boardState, move, selectedPiece, capturedPiece);
+};
+
+const incrementHalfMoveClock = (
+	boardState: BoardState,
+	move: Move,
+	movedPiece: Piece,
+	capturedPiece?: Piece
+) => {
+	if (movedPiece.type === 'pawn' || capturedPiece !== undefined || isEnPassantCapture(move)) {
+		boardState.halfMoveClock = 0;
+	} else {
+		boardState.halfMoveClock++;
 	}
 };
 
@@ -147,3 +164,5 @@ const cloneBoardState = (boardState: BoardState): BoardState => ({
 
 const isCastleMove = (move: Move): move is KingMove =>
 	'isCastlingQueenside' in move || 'isCastlingKingside' in move;
+
+const isEnPassantCapture = (move: Move): move is PawnMove => 'enPassantCapture' in move;
