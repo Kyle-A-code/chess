@@ -36,14 +36,18 @@ const getCastleMoves = (boardState: BoardState, side: Side, currentSquare: Squar
 		if (
 			boardState.castlingAvailability.includes('Q') &&
 			boardState.piecePlacement['a1']?.type === 'rook' &&
-			['b1', ...WHITE_QUEENSIDE_CASTLING_PATH].every(square => boardState.piecePlacement[square as Square] === undefined)
+			['b1', ...WHITE_QUEENSIDE_CASTLING_PATH].every(
+				(square) => boardState.piecePlacement[square as Square] === undefined
+			)
 		) {
 			moves.push({ to: 'c1', isCastlingQueenside: true });
 		}
 		if (
 			boardState.castlingAvailability.includes('K') &&
 			boardState.piecePlacement['h1']?.type === 'rook' &&
-			WHITE_KINGSIDE_CASTLING_PATH.every(square => boardState.piecePlacement[square] === undefined)
+			WHITE_KINGSIDE_CASTLING_PATH.every(
+				(square) => boardState.piecePlacement[square] === undefined
+			)
 		) {
 			moves.push({ to: 'g1', isCastlingKingside: true });
 		}
@@ -51,14 +55,18 @@ const getCastleMoves = (boardState: BoardState, side: Side, currentSquare: Squar
 		if (
 			boardState.castlingAvailability.includes('q') &&
 			boardState.piecePlacement['a8']?.type === 'rook' &&
-			['b8', ...BLACK_QUEENSIDE_CASTLING_PATH].every(square => boardState.piecePlacement[square as Square] === undefined)
+			['b8', ...BLACK_QUEENSIDE_CASTLING_PATH].every(
+				(square) => boardState.piecePlacement[square as Square] === undefined
+			)
 		) {
 			moves.push({ to: 'c8', isCastlingQueenside: true });
 		}
 		if (
 			boardState.castlingAvailability.includes('k') &&
 			boardState.piecePlacement['h8']?.type === 'rook' &&
-			BLACK_KINGSIDE_CASTLING_PATH.every(square => boardState.piecePlacement[square] === undefined)
+			BLACK_KINGSIDE_CASTLING_PATH.every(
+				(square) => boardState.piecePlacement[square] === undefined
+			)
 		) {
 			moves.push({ to: 'g8', isCastlingKingside: true });
 		}

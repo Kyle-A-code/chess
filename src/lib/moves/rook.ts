@@ -1,5 +1,5 @@
 import { squareToFileRank, type Square } from '../game/boardPrimitives';
-import type { BoardState, Move } from '../types';
+import type { BoardState } from '../types';
 import { getOrthogonalMoves } from './helpers/orthogonals';
 
 const WHITE_LEFT_STARTING_SQUARE = 'a1';
