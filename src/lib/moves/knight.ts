@@ -9,6 +9,17 @@ import {
 	type Square
 } from '../game/boardPrimitives';
 
+const KNIGHT_OFFSETS = [
+	[-2, 1],
+	[-2, -1],
+	[2, 1],
+	[2, -1],
+	[-1, 2],
+	[-1, -2],
+	[1, 2],
+	[1, -2]
+];
+
 const getPseudoLegalMoves = (
 	boardState: BoardState,
 	side: Side,
@@ -16,22 +27,13 @@ const getPseudoLegalMoves = (
 	rank: Rank
 ): Move[] => {
 	const moves: Move[] = [];
-	const rankIdx = RANKS.indexOf(rank);
-	const fileIdx = FILES.indexOf(file);
+	const currentRankIndex = RANKS.indexOf(rank);
+	const currentFileIndex = FILES.indexOf(file);
 
-	const possibleMoves = [
-		{ file: fileIdx - 2, rank: rankIdx + 1 },
-		{ file: fileIdx - 2, rank: rankIdx - 1 },
-		{ file: fileIdx + 2, rank: rankIdx + 1 },
-		{ file: fileIdx + 2, rank: rankIdx - 1 },
-		{ file: fileIdx - 1, rank: rankIdx + 2 },
-		{ file: fileIdx - 1, rank: rankIdx - 2 },
-		{ file: fileIdx + 1, rank: rankIdx + 2 },
-		{ file: fileIdx + 1, rank: rankIdx - 2 }
-	];
-
-	possibleMoves.forEach((move) => {
-		const targetSquare = `${FILES[move.file]}${RANKS[move.rank]}`;
+	KNIGHT_OFFSETS.forEach(([fileOffset, rankOffset]) => {
+		const targetRankIndex = currentRankIndex + rankOffset;
+		const targetFileIndex = currentFileIndex + fileOffset;
+		const targetSquare = `${FILES[targetFileIndex]}${RANKS[targetRankIndex]}`;
 		if (isSquare(targetSquare) && boardState.piecePlacement[targetSquare]?.side !== side) {
 			moves.push({ to: targetSquare });
 		}
