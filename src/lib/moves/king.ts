@@ -9,6 +9,11 @@ import {
 	squareToFileRank
 } from '../game/boardPrimitives';
 
+export const WHITE_QUEENSIDE_CASTLING_PATH: Square[] = ['c1', 'd1'];
+export const WHITE_KINGSIDE_CASTLING_PATH: Square[] = ['f1', 'g1'];
+export const BLACK_QUEENSIDE_CASTLING_PATH: Square[] = ['c8', 'd8'];
+export const BLACK_KINGSIDE_CASTLING_PATH: Square[] = ['f8', 'g8'];
+
 const DIRECTIONS = [
 	[1, 0],
 	[-1, 0],
@@ -31,17 +36,14 @@ const getCastleMoves = (boardState: BoardState, side: Side, currentSquare: Squar
 		if (
 			boardState.castlingAvailability.includes('Q') &&
 			boardState.piecePlacement['a1']?.type === 'rook' &&
-			boardState.piecePlacement['b1'] === undefined &&
-			boardState.piecePlacement['c1'] === undefined &&
-			boardState.piecePlacement['d1'] === undefined
+			['b1', ...WHITE_QUEENSIDE_CASTLING_PATH].every(square => boardState.piecePlacement[square as Square] === undefined)
 		) {
 			moves.push({ to: 'c1', isCastlingQueenside: true });
 		}
 		if (
 			boardState.castlingAvailability.includes('K') &&
 			boardState.piecePlacement['h1']?.type === 'rook' &&
-			boardState.piecePlacement['f1'] === undefined &&
-			boardState.piecePlacement['g1'] === undefined
+			WHITE_KINGSIDE_CASTLING_PATH.every(square => boardState.piecePlacement[square] === undefined)
 		) {
 			moves.push({ to: 'g1', isCastlingKingside: true });
 		}
@@ -49,17 +51,14 @@ const getCastleMoves = (boardState: BoardState, side: Side, currentSquare: Squar
 		if (
 			boardState.castlingAvailability.includes('q') &&
 			boardState.piecePlacement['a8']?.type === 'rook' &&
-			boardState.piecePlacement['b8'] === undefined &&
-			boardState.piecePlacement['c8'] === undefined &&
-			boardState.piecePlacement['d8'] === undefined
+			['b8', ...BLACK_QUEENSIDE_CASTLING_PATH].every(square => boardState.piecePlacement[square as Square] === undefined)
 		) {
 			moves.push({ to: 'c8', isCastlingQueenside: true });
 		}
 		if (
 			boardState.castlingAvailability.includes('k') &&
 			boardState.piecePlacement['h8']?.type === 'rook' &&
-			boardState.piecePlacement['f8'] === undefined &&
-			boardState.piecePlacement['g8'] === undefined
+			BLACK_KINGSIDE_CASTLING_PATH.every(square => boardState.piecePlacement[square] === undefined)
 		) {
 			moves.push({ to: 'g8', isCastlingKingside: true });
 		}
