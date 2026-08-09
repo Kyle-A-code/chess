@@ -40,7 +40,7 @@ export const getLegalMoves = (boardState: BoardState): Moves => {
 	return legalMoves;
 };
 
-export const getFriendlyKingSquare = (boardState: BoardState, side: Side): Square | undefined => {
+export const findKingSquareForSide = (boardState: BoardState, side: Side): Square | undefined => {
 	return (Object.keys(boardState.piecePlacement) as Array<Square>).find((square) => {
 		const piece = boardState.piecePlacement[square];
 		return piece?.type === 'king' && piece.side === side;
@@ -147,7 +147,7 @@ const moveDoesNotExposeKingToCheck = (
 	const clonedBoardState = cloneBoardState(boardState);
 	processMove(clonedBoardState, move, fromSquare);
 
-	const kingSquare = getFriendlyKingSquare(clonedBoardState, boardState.activeSide);
+	const kingSquare = findKingSquareForSide(clonedBoardState, boardState.activeSide);
 	if (!kingSquare) throw new Error('King square not found');
 
 	return !isActiveSideInCheck(clonedBoardState, kingSquare);
