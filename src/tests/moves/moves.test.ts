@@ -58,6 +58,10 @@ describe('Given checking whether active side is in check', () => {
 	});
 });
 
+describe.skip('Given generating legal moves', () => {
+	test('When legal move tests are implemented, Then this suite should cover key legal move scenarios', () => {});
+});
+
 describe('Given processing a move', () => {
 	let boardState: BoardState;
 

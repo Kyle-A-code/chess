@@ -24,8 +24,9 @@ Build an interactive chess experience as an opportunity to learn more about svel
   - [x] Add halfmove counter updates (reset on pawn move/capture, increment otherwise)
   - [x] Add promotion logic (auto queen promotion)
 - [ ] **Milestone 7:** Game Completion Logic
-  - [ ] Add checkmate detection
-  - [ ] Add stalemate detection
+  - [x] Add checkmate detection
+  - [x] Add stalemate detection
+  - [ ] Prettify the UI
 - [ ] **Milestone 8:** Add ai opponent
 
 ## Run Locally

@@ -1,7 +1,7 @@
-import type { BoardState, Moves } from '../types';
+import type { BoardState, Moves, Side } from '../types';
 import type { Square } from './boardPrimitives';
 import { fenToBoardState, boardStateToFen, START_FEN } from './fen';
-import { getLegalMoves, processMove } from '../moves/moves';
+import { findKingSquareForSide, getLegalMoves, isActiveSideInCheck, processMove } from '../moves/moves';
 
 const FEN_STRING_STORAGE_KEY = 'fenString';
 
@@ -9,6 +9,8 @@ interface GameState {
 	selectedTileId: Square | undefined;
 	boardState: BoardState;
 	moves: Moves;
+	checkmatedSide?: Side | undefined;
+	stalematedSide?: Side | undefined;
 }
 
 const getStoredFen = (): string | null => {
@@ -51,6 +53,8 @@ export const resetGame = () => {
 	gameState.selectedTileId = resetState.selectedTileId;
 	gameState.boardState = resetState.boardState;
 	gameState.moves = getLegalMoves(gameState.boardState);
+	gameState.checkmatedSide = undefined;
+	gameState.stalematedSide = undefined;
 };
 
 export const selectTile = (tileId: Square) => {
@@ -95,6 +99,17 @@ const nextTurn = () => {
 		gameState.boardState.fullMoveNumber++;
 	}
 	gameState.moves = getLegalMoves(gameState.boardState);
+	if (!canMove()) {
+		const kingSquare = findKingSquareForSide(gameState.boardState, gameState.boardState.activeSide);
+		if (!kingSquare) {
+			throw new Error("king square not found");
+		}
+		if (isActiveSideInCheck(gameState.boardState, kingSquare)) {
+			gameState.checkmatedSide = gameState.boardState.activeSide;
+		} else {
+			gameState.stalematedSide = gameState.boardState.activeSide;
+		}
+	}
 };
 
 const deselectTile = () => {
@@ -104,4 +119,11 @@ const deselectTile = () => {
 const persistBoardState = () => {
 	const fenString = boardStateToFen(gameState.boardState);
 	persistFen(fenString);
+};
+
+const canMove = (): boolean => {
+	for (const moves of Object.values(gameState.moves)) {
+		if (moves.length > 0) return true;
+	}
+	return false;
 };
